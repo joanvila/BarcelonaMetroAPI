@@ -6,6 +6,8 @@ var winston = require('winston');
 var expressWinston = require('express-winston');
 var config = require('./config');
 
+var port = process.env.PORT || 8080;
+
 var app = express();
 
 app.use(bodyParser.json());
@@ -19,6 +21,6 @@ var stationsRouter = require('./routes/stations');
 app.use('/stations', stationsRouter);
 
 
-http.createServer(app).listen(8080, function(){
-  console.log('Listening on port 8080');
+http.createServer(app).listen(port, function(){
+  console.log('Listening on port ' + port);
 });
