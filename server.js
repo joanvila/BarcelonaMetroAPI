@@ -15,9 +15,7 @@ app.use(cors());
 app.use(expressWinston.logger(config.winston_options));
 
 //Import the routers
-var linesRouter = require('./routes/lines');
 var stationsRouter = require('./routes/stations');
-app.use('/lines', linesRouter);
 app.use('/stations', stationsRouter);
 
 
