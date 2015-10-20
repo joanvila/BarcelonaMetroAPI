@@ -1,1 +1,3 @@
 # BarcelonaMetroAPI
+
+This api gets the metro information provided by [Barcelona urban mobility API REST](http://barcelonaapi.marcpous.com/) and adds to it extra information such as lines color, stops order within each line...
