@@ -12,8 +12,8 @@ function compareLines(first, second) {
 stationsRouter.get('/', function(req, res, next) {
     request('http://barcelonaapi.marcpous.com/metro/stations.json', function (error, response, body) {
         if (!error && response.statusCode == 200) {
-            var body = JSON.parse(body);
-            var data = body.data;
+            var jsonBody = JSON.parse(body);
+            var data = jsonBody.data;
             var metroData = data.metro;
             var lines = [];
             for (var i = 0; i < metroData.length; ++i) {
@@ -21,7 +21,17 @@ stationsRouter.get('/', function(req, res, next) {
             }
             lines = _.uniq(lines);
             lines.sort(compareLines);
-            res.status(200).json(lines);
+            // Add line order to JSON object
+            for (var i = 0; i < jsonBody.data.metro.length; ++i) {
+              for (var j = 0; j < lines.length; ++j) {
+                if (jsonBody.data.metro[i].line == lines[j]) {
+                  jsonBody.data.metro[i].lineorder = j;
+                  j = lines.length;
+                }
+              }
+            }
+
+            res.status(200).send(JSON.stringify(jsonBody));
         } else {
             console.log(error);
             res.status(500).json(error);
