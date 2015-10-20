@@ -3,7 +3,8 @@ var request = require('request');
 var _ = require('lodash');
 
 function compareLines(first, second) {
-  if (first.length <= second.length) return -1;
+  if (first.length < second.length) return -1;
+  else if (first.length > second.length) return 1;
   else if (first <= second) return -1;
   return 1;
 }
