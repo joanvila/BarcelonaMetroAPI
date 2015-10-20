@@ -1,4 +1,5 @@
 var stationsRouter = require('express').Router();
+var request = require('request');
 var _ = require('lodash');
 
 stationsRouter.get('/', function(req, res, next) {
