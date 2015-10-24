@@ -10,6 +10,18 @@ function compareLines (first, second) {
   return 1
 }
 
+function findLines (metroData) {
+  var lines = []
+  for (var k = 0; k < metroData.length; ++k) {
+    if (metroData[k].line !== 'L9|L10') {
+      lines.push(metroData[k].line)
+    }
+  }
+  lines = _.uniq(lines)
+  lines.sort(compareLines)
+  return lines
+}
+
 function cloneObject (obj) {
   if (obj === null || typeof obj !== 'object') {
     return obj
@@ -26,33 +38,24 @@ stationsRouter.get('/', function (req, res, next) {
     if (!error && response.statusCode === 200) {
       var jsonBody = JSON.parse(body)
       var metroData = jsonBody.data.metro
-      var lines = []
-      for (var k = 0; k < metroData.length; ++k) {
-        lines.push(metroData[k].line)
-      }
-      lines = _.uniq(lines)
-      lines.sort(compareLines)
-      // Add line order to JSON object
+      var lines = findLines(metroData)
       for (var i = 0; i < metroData.length; ++i) {
-        for (var j = 0; j < lines.length; ++j) {
-          var stop = jsonBody.data.metro[i].name.replace(/ /g, '')
-          var line = jsonBody.data.metro[i].line.replace(/ /g, '')
-          if (line === 'L9|L10') {
-            var first = cloneObject(jsonBody.data.metro[i])
-            first.line = 'L9'
-            var second = cloneObject(jsonBody.data.metro[i])
-            second.line = 'L10'
-            jsonBody.data.metro.splice(i, 1)
-            jsonBody.data.metro.push(first)
-            jsonBody.data.metro.push(second)
-          } else if (jsonBody.data.metro[i].line === lines[j]) {
-            jsonBody.data.metro[i].lineorder = j
-            jsonBody.data.metro[i].linecolor = data.linesColor[j]
-            jsonBody.data.metro[i].paradaorder = data[line][stop]
-            j = lines.length
-          }
+        var stop = jsonBody.data.metro[i].name.replace(/ /g, '')
+        var line = jsonBody.data.metro[i].line.replace(/ /g, '')
+        if (line === 'L9|L10') {
+          var first = cloneObject(jsonBody.data.metro[i])
+          first.line = 'L9'
+          var second = cloneObject(jsonBody.data.metro[i])
+          second.line = 'L10'
+          jsonBody.data.metro.splice(i, 1)
+          jsonBody.data.metro.push(first)
+          jsonBody.data.metro.push(second)
+        } else {
+          jsonBody.data.metro[i].paradaorder = data[line][stop]
         }
       }
+      jsonBody.data.linesOrder = lines
+      jsonBody.data.linesColor = data.linesColor
       res.status(200).send(JSON.stringify(jsonBody))
     } else {
       res.status(500).json(error)

@@ -1,7 +1,7 @@
-// linesColors corresponding to l1, l2, l3, l4, l5, l9, l10, l11, tramvia blau,
-// funicular de monjuic, teleferic de montjuic
-exports.linesColor = ['#D5262E', '#87328B', '#49AC3B', '#FCAF00', '#2767BF',
-  '#F07012', '#179DEF', '#9BC848', '#0034A2', '#014228', '#56A1E5']
+exports.linesColor = {L1: '#D5262E', L2: '#87328B', L3: '#49AC3B', L4: '#FCAF00',
+  L5: '#2767BF', L9: '#F07012', L10: '#179DEF', L11: '#9BC848',
+  TRAMVIABLAU: '#0034A2', FUNICULARDEMONTJUÏC: '#014228',
+  TELEFÈRICDEMONTJUÏC: '#56A1E5'}
 
 exports.L1 = {HospitaldeBellvitge: 0, Bellvitge: 1, 'Av.Carrilet': 2,
   'Rbla.JustOliveres': 3, CanSerra: 4, Florida: 5, Torrassa: 6, SantaEulàlia: 7,
