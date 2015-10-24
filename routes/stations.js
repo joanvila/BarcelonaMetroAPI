@@ -10,6 +10,17 @@ function compareLines (first, second) {
   return 1
 }
 
+function cloneObject (obj) {
+  if (obj === null || typeof obj !== 'object') {
+    return obj
+  }
+  var temp = obj.constructor()
+  for (var key in obj) {
+    temp[key] = cloneObject(obj[key])
+  }
+  return temp
+}
+
 stationsRouter.get('/', function (req, res, next) {
   request('http://barcelonaapi.marcpous.com/metro/stations.json', function (error, response, body) {
     if (!error && response.statusCode === 200) {
@@ -24,9 +35,20 @@ stationsRouter.get('/', function (req, res, next) {
       // Add line order to JSON object
       for (var i = 0; i < metroData.length; ++i) {
         for (var j = 0; j < lines.length; ++j) {
-          if (jsonBody.data.metro[i].line === lines[j]) {
+          var stop = jsonBody.data.metro[i].name.replace(/ /g, '')
+          var line = jsonBody.data.metro[i].line.replace(/ /g, '')
+          if (line === 'L9|L10') {
+            var first = cloneObject(jsonBody.data.metro[i])
+            first.line = 'L9'
+            var second = cloneObject(jsonBody.data.metro[i])
+            second.line = 'L10'
+            jsonBody.data.metro.splice(i, 1)
+            jsonBody.data.metro.push(first)
+            jsonBody.data.metro.push(second)
+          } else if (jsonBody.data.metro[i].line === lines[j]) {
             jsonBody.data.metro[i].lineorder = j
             jsonBody.data.metro[i].linecolor = data.linesColor[j]
+            jsonBody.data.metro[i].paradaorder = data[line][stop]
             j = lines.length
           }
         }
