@@ -37,9 +37,8 @@ stationsRouter.get('/', function (req, res, next) {
   request('http://barcelonaapi.marcpous.com/metro/stations.json', function (error, response, body) {
     if (!error && response.statusCode === 200) {
       var jsonBody = JSON.parse(body)
-      var metroData = jsonBody.data.metro
-      var lines = findLines(metroData)
-      for (var i = 0; i < metroData.length; ++i) {
+      var lines = findLines(jsonBody.data.metro)
+      for (var i = 0; i < jsonBody.data.metro.length; ++i) {
         var stop = jsonBody.data.metro[i].name.replace(/ /g, '')
         var line = jsonBody.data.metro[i].line.replace(/ /g, '')
         if (line === 'L9|L10') {
@@ -50,6 +49,7 @@ stationsRouter.get('/', function (req, res, next) {
           jsonBody.data.metro.splice(i, 1)
           jsonBody.data.metro.push(first)
           jsonBody.data.metro.push(second)
+          i = i - 1
         } else {
           jsonBody.data.metro[i].paradaorder = data[line][stop]
         }
