@@ -25,7 +25,7 @@ stationsRouter.get('/', function(req, res, next) {
             lines = _.uniq(lines);
             lines.sort(compareLines);
             // Add line order to JSON object
-            for (var i = 0; i < jsonBody.data.metro.length; ++i) {
+            for (var i = 0; i < metroData.length; ++i) {
               for (var j = 0; j < lines.length; ++j) {
                 if (jsonBody.data.metro[i].line == lines[j]) {
                   jsonBody.data.metro[i].lineorder = j;
