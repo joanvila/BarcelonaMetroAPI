@@ -49,10 +49,10 @@ stationsRouter.get('/', function (req, res, next) {
           jsonBody.data.metro.splice(i, 1)
           jsonBody.data.metro.push(first)
           jsonBody.data.metro.push(second)
-          i = i - 1
-        } else {
-          jsonBody.data.metro[i].paradaorder = data[line][stop]
+          stop = jsonBody.data.metro[i].name.replace(/ /g, '')
+          line = jsonBody.data.metro[i].line.replace(/ /g, '')
         }
+        jsonBody.data.metro[i].paradaorder = data[line][stop]
       }
       jsonBody.data.linesOrder = lines
       jsonBody.data.linesColor = data.linesColor
