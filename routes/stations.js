@@ -56,6 +56,7 @@ stationsRouter.get('/', function (req, res, next) {
       }
       jsonBody.data.linesOrder = lines
       jsonBody.data.linesColor = data.linesColor
+      jsonBody.data.tarifes = data.tarifes
       res.status(200).send(JSON.stringify(jsonBody))
     } else {
       res.status(500).json(error)
